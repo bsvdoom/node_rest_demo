@@ -10,6 +10,8 @@ var cors = require('cors');
 // var usersRouter = require('./routes/users');
 // var serverRouter = require('./routes/server');
 var tutorialRouter = require('./routes/turorial');
+var authRouter = require('./routes/auth.routes');
+var userRouter = require('./routes/user.routes');
 
 var app = express();
 
@@ -43,10 +45,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/server', serverRouter);
 // app.use('/tutorial', tutorialRouter);
 app.use('/', tutorialRouter);
+app.use('/auth', authRouter);
+app.use('/test', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+app.use(function(req, res, next) {
+    res.header(
+        "Access-Control-Allow-Headers",
+        "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
 });
 
 // error handler
@@ -61,6 +73,8 @@ app.use(function(err, req, res, next) {
 });
 
 const db = require("./models");
+const Role = require('./models/role.model')
+
 db.mongoose
     .connect(db.url, {
       useNewUrlParser: true,
@@ -68,10 +82,39 @@ db.mongoose
     })
     .then(() => {
       console.log("Connected to the database!");
+        initialize();
     })
     .catch(err => {
       console.log("Cannot connect to the database!", err);
       process.exit();
     });
+
+
+function initialize() {
+    Role.estimatedDocumentCount((err, count) => {
+        if (!err && count === 0) {
+            new Role({
+                name: "user"
+            }).save(err => {
+                if (err) {
+                    console.log("error", err);
+                }
+
+                console.log("added 'user' to roles collection");
+            });
+
+            new Role({
+                name: "admin"
+            }).save(err => {
+                if (err) {
+                    console.log("error", err);
+                }
+
+                console.log("added 'admin' to roles collection");
+            });
+        }
+    });
+}
+
 
 module.exports = app;

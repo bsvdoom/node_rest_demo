@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var fs = require("fs");
+// var fs = require("fs");
 
-const tutorials = require("../controllers/tutorial.controller.js");
+const tutorials = require("../controllers/tutorial.controller");
 
     // Create a new Tutorial
 router.post("/", tutorials.create);

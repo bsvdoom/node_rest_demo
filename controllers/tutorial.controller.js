@@ -3,7 +3,7 @@
 // const Tutorial = db.tutorials;
 // var Tutorial=require('../models/crud-model');
 // var mongoose = require('mongoose');
-var Tutorial = require('../models/tutorial.model');
+const Tutorial = require('../models/tutorial.model');
 
 
 exports.create = (req, res) => {
@@ -129,6 +129,6 @@ exports.findAllPublished = (req, res) => {
         });
 };
 
-module.exports = exports;
+// module.exports = exports;
 
 
