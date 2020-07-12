@@ -1,15 +1,22 @@
 // var express = require('express');
 var mongoose = require("mongoose");
-
-var schema = mongoose.Schema(
-    {
-        title: String,
-        description: String,
-        published: Boolean
+const Contact = mongoose.model(
+    "Contact",
+    new mongoose.Schema({
+        name: { type: String, required: true, maxlength: 100},
+        email: { type: String, required: true, maxlength: 100},
+        tel: { type: String, required: true, maxlength: 100},
+        message: { type: String, required: true, maxlength: 1000},
+        url: { type: String, maxlength: 100},
     },
     { timestamps: true }
+)
 );
-//
+module.exports = Contact;
+//const User = require('../models/user.model');
+
+
+
 // schema.method("toJSON", function() {
 //     const { __v, _id, ...object } = this.toObject();
 //     object.id = _id;
@@ -25,4 +32,4 @@ var schema = mongoose.Schema(
 // const Tutorial = mongoose.model('tutorials',schema);
 
 // module.exports = Tutorial;
-module.exports = mongoose.model('tutorial',schema);
+// module.exports = mongoose.model('contacts',schema);

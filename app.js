@@ -1,22 +1,23 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const bodyParser = require("body-parser");
-var cors = require('cors');
+const cors = require('cors');
+// const { check, validationResult } = require('express-validator');
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 // var serverRouter = require('./routes/server');
-var tutorialRouter = require('./routes/turorial');
-var authRouter = require('./routes/auth.routes');
-var userRouter = require('./routes/user.routes');
+const contactRouter = require('./routes/contact.routes');
+const authRouter = require('./routes/auth.routes');
+const userRouter = require('./routes/user.routes');
 
-var app = express();
+const app = express();
 
 
-var corsOptions = {
+const corsOptions = {
     origin: "http://localhost:8081"
 };
 
@@ -44,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/users', usersRouter);
 // app.use('/server', serverRouter);
 // app.use('/tutorial', tutorialRouter);
-app.use('/', tutorialRouter);
+app.use('/', contactRouter);
 app.use('/auth', authRouter);
 app.use('/test', userRouter);
 
