@@ -1,5 +1,10 @@
-const db = require("../models");
-const Tutorial = db.tutorials;
+// const db = require("../models/index");
+// const Tutorial = db.tutorials;
+// const Tutorial = db.tutorials;
+// var Tutorial=require('../models/crud-model');
+// var mongoose = require('mongoose');
+var Tutorial = require('../models/tutorial.model');
+
 
 exports.create = (req, res) => {
     // Validate request

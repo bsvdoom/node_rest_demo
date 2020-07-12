@@ -1,4 +1,4 @@
-var express = require('express');
+// var express = require('express');
 var mongoose = require("mongoose");
 
 var schema = mongoose.Schema(
@@ -16,7 +16,13 @@ schema.method("toJSON", function() {
     return object;
 });
 
-const Tutorial = mongoose.model("tutorial", schema);
+// const Tutorial = mongoose.model("Tutorial", schema);
 // return Tutorial;
 
-module.exports = Tutorial;
+// module.exports = mongoose.model('List', listSchema);
+// module.exports = mongoose.model("tutorial", schema);
+
+// const Tutorial = mongoose.model('tutorials',schema);
+
+// module.exports = Tutorial;
+module.exports = mongoose.model('tutorial',schema);
