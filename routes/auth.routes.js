@@ -1,8 +1,11 @@
 let express = require('express');
 let router = express.Router();
 const { verifySignUp } = require("../middlewares");
-const authController = require("../controllers/auth.controller");
+const { authJwt } = require("../middlewares");
 const { check, validationResult } = require('express-validator');
+
+const authController = require("../controllers/auth.controller");
+
 
 
 // module.exports = function(app) {
@@ -24,8 +27,10 @@ const { check, validationResult } = require('express-validator');
 router.post(
     "/signup",
     [
+        authJwt.verifyToken,
+        authJwt.isAdmin,
         verifySignUp.checkDuplicateEmail,
-        verifySignUp.checkRolesExisted,
+        verifySignUp.checkRolesExists,
         check('first_name').isLength({ min: 3 }),
         check('family_name').isLength({ min: 3 }),
         check('email').isEmail(),
@@ -38,6 +43,15 @@ router.post(
 );
 
 router.post("/signin", authController.signin);
+
+router.delete(
+    "/delete",
+    [
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+    ],
+    authController.delete
+);
 // };
 
 module.exports = router;
