@@ -1,8 +1,5 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
-// const db = require("../models");
-// const User = db.user;
-// const Role = db.role;
 
 const User = require('../models/user.model');
 const Role = require('../models/role.model');
@@ -31,9 +28,8 @@ isAdmin = (req, res, next) => {
         }
 
         if (!user) {
-            return res.status(404).send({ message: "Wrong token." });
+            return res.status(404).send({ message: "Wrong user." });
         }
-        // console.log(req.userId);
 
         Role.find(
             {
@@ -61,6 +57,7 @@ isAdmin = (req, res, next) => {
 
 const authJwt = {
     verifyToken,
-    isAdmin
+    isAdmin,
 };
+
 module.exports = authJwt;

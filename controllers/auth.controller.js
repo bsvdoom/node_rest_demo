@@ -1,14 +1,11 @@
 const config = require("../config/auth.config");
-// const db = require("../models");
-// const User = db.user;
-// const Role = db.role;
-const { check, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 
 const User = require('../models/user.model');
 const Role = require('../models/role.model');
 
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+let jwt = require("jsonwebtoken");
+let bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
     const errors = validationResult(req)
@@ -110,7 +107,6 @@ exports.signin = (req, res) => {
             let authorities = [];
 
             for (let i = 0; i < user.roles.length; i++) {
-                // authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
                 authorities.push(user.roles[i].name);
             }
             res.status(200).send({
@@ -127,48 +123,12 @@ exports.signin = (req, res) => {
         });
 };
 
-//
-// exports.delete = (req, res) => {
-//     const id = req.params.id;
-//     User.findOne({
-//         email: req.body.email
-//     })
-//     // User.findByIdAndRemove(id)
-//         .then(data => {
-//             if (!data) {
-//                 res.status(404).send({
-//                     message: `Cannot delete User with id=${id}, User not found.`
-//                 });
-//             } else {
-//                 res.send({
-//                     message: "User was deleted successfully!"
-//                 });
-//             }
-//         })
-//         .catch(err => {
-//             res.status(500).send({
-//                 message: "Could not delete User with id=" + id
-//             });
-//         });
-// };
-//
-//
-
-
-
-
 exports.delete = (req, res) => {
     const email = req.body.email;
 
-    // User.findOne({
-    //     email: email
-    // })
-        // User.findByIdAndRemove(id)
     User.findOneAndDelete(
         { "email" : email }
-    )
-
-        .then(data => {
+    ).then(data => {
             if (!data) {
                 res.status(404).send({
                     message: `Cannot delete User with id=${email}, User not found.`
@@ -185,30 +145,3 @@ exports.delete = (req, res) => {
             });
         });
 };
-        // .delete((err, data) => {
-        //     if (!data) {
-        //         res.status(404).send({
-        //             message: `Cannot delete User with email=${email}, User not found.`
-        //         });
-        //     } else {
-        //         res.send({
-        //             message: "User was deleted successfully!"
-        //         });
-        //     }
-        // })
-        // .catch(err => {
-        //     res.status(500).send({
-        //         message: "Could not delete User with id=" + email
-        //     });
-        // });
-// };
-
-
-// module.exports = exports; first_name: req.body.first_name,
-//         family_name: req.body.family_name,
-//         email: req.body.email,
-//         tel: req.body.tel,
-//         facebook: req.body.facebook,
-//         password: bcrypt.hashSync(req.body.password, 8),
-//         date_of_birth: req.body.date_of_birth,
-//         active: true,

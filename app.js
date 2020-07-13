@@ -5,17 +5,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require("body-parser");
 const cors = require('cors');
-// const { check, validationResult } = require('express-validator');
-
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-// var serverRouter = require('./routes/server');
 const contactRouter = require('./routes/contact.routes');
 const authRouter = require('./routes/auth.routes');
-const userRouter = require('./routes/user.routes');
-
 const app = express();
-
 
 const corsOptions = {
     origin: "http://localhost:8081"
@@ -29,8 +21,6 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -41,13 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-// app.use('/server', serverRouter);
-// app.use('/tutorial', tutorialRouter);
 app.use('/', contactRouter);
 app.use('/auth', authRouter);
-app.use('/test', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -116,6 +101,5 @@ function initialize() {
         }
     });
 }
-
 
 module.exports = app;
