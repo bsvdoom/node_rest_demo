@@ -45,3 +45,5 @@ GET / (ONLY ADMIN)
     
 ---
 Lukács Ádám @flowtex.hu 2020
+- 
+ 
