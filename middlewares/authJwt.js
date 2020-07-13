@@ -55,9 +55,45 @@ isAdmin = (req, res, next) => {
     });
 };
 
+getAdminEmail = (req, res, next) => {
+
+        Role.find(
+            {
+                name: "admin"
+            },
+            (err, role) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                if(!role) {
+                    console.log("This should not happen.");
+                }
+
+                User.findOne(
+                    {"roles" : role[0]._id}
+                    ).exec((err, user) => {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+
+                    if (!user) {
+                        console.log("No admin user.");
+                        return;
+                    }
+
+                    req.admin_email = user.email;
+                    next();
+            }
+        );
+    });
+};
+
 const authJwt = {
     verifyToken,
     isAdmin,
+    getAdminEmail
 };
 
 module.exports = authJwt;

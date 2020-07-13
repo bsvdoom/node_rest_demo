@@ -27,32 +27,29 @@ exports.create = (req, res) => {
                 }
             });
 
-            let mailOptions = {
-                from: config.from,
-                to: config.admin_to,
-                bcc: data.email,
-                subject: 'Contact us form',
-                html: '<h1>Thank you for contacting us!</h1><p>We will reply shortly!</p>'
-            }
-
-            console.log("Sending mail:");
-            console.log(mailOptions);
-
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
+            const {authJwt} = require("../middlewares");
+            authJwt.getAdminEmail(req, res, (data2) => {
+                let mailOptions = {
+                    from: config.from,
+                    to: req.admin_email,
+                    bcc: data.email,
+                    subject: 'Contact us form',
+                    html: '<h1>Thank you for contacting us!</h1><p>We will reply shortly!</p>'
                 }
-            });
 
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Contact Us form."
-            });
+                console.log("Sending mail:");
+                console.log(mailOptions);
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+
+                res.send(data);
+            })
         });
 };
 
