@@ -1,7 +1,7 @@
 # node_rest_demo
 This project uses NodeJS, ExpressJS, MongoDB, Mongoose, JWT, express-validator, cors middleware
 
-Auth Contorllers:
+Auth Controllers:
 -
 
 POST auth/signup (ONLY ADMIN)
@@ -28,7 +28,7 @@ DELETE auth/delete (ONLY ADMIN)
         {"email": "asd@bsv.huax"}
         
 
-Contact form Contorllers:
+Contact form Controllers:
 -
 
 POST /
