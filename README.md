@@ -1,5 +1,5 @@
 # node_rest_demo
-This project uses NodeJS, ExpressJS, MongoDB, Mongoose, JWT, express-validator, cors middleware
+This project uses Node.js, Express.js, MongoDB, Mongoose, JWT, express-validator, cors middleware
 
 Auth Controllers:
 -
