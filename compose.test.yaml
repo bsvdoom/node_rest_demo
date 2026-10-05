@@ -1,0 +1,90 @@
+services:
+  app:
+    build:
+      context: .
+    stop_grace_period: 20s
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: test
+      PORT: 3000
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: test_integration
+      MONGODB_USER: integration_app
+      MONGODB_PASSWORD_FILE: /run/secrets/mongo_app_password
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      JWT_ISSUER: integration-api
+      JWT_AUDIENCE: integration-client
+      CORS_ORIGIN: http://integration.test
+      SMTP_JSON_TRANSPORT: "true"
+      SMTP_SERVICE: integration-json
+      SMTP_USER: integration-json
+      SMTP_PASS_FILE: /run/secrets/smtp_password
+      SMTP_FROM: integration@example.invalid
+      ADMIN_FIRST_NAME: Integration
+      ADMIN_FAMILY_NAME: Administrator
+      ADMIN_EMAIL: admin@integration.test
+      ADMIN_TEL: "+3610000000"
+      ADMIN_PASSWORD_FILE: /run/secrets/admin_password
+    secrets:
+      - mongo_app_password
+      - jwt_secret
+      - smtp_password
+      - admin_password
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - >-
+          fetch('http://127.0.0.1:3000/health').then(response =>
+          process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))
+      interval: 2s
+      timeout: 2s
+      retries: 20
+      start_period: 5s
+
+  mongo:
+    image: mongo:8.0.29-noble@sha256:021b2d5ae9d253f2cca17491cc8d03aed8df3c840f3252066aa62d3277fc406e
+    stop_grace_period: 30s
+    environment:
+      GLIBC_TUNABLES: glibc.pthread.rseq=1
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/mongo_root_username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_root_password
+      MONGO_INITDB_DATABASE: test_integration
+      MONGO_APP_DATABASE: test_integration
+      MONGO_APP_USERNAME: integration_app
+      MONGO_APP_PASSWORD_FILE: /run/secrets/mongo_app_password
+    secrets:
+      - mongo_root_username
+      - mongo_root_password
+      - mongo_app_password
+    volumes:
+      - mongo_test_data:/data/db
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/10-create-app-user.js:ro
+      - ./docker/mongo-healthcheck.js:/docker-healthcheck.js:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--nodb", "--file", "/docker-healthcheck.js"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+volumes:
+  mongo_test_data:
+
+secrets:
+  mongo_root_username:
+    file: ./secrets/test/mongo_root_username
+  mongo_root_password:
+    file: ./secrets/test/mongo_root_password
+  mongo_app_password:
+    file: ./secrets/test/mongo_app_password
+  jwt_secret:
+    file: ./secrets/test/jwt_secret
+  smtp_password:
+    file: ./secrets/test/smtp_password
+  admin_password:
+    file: ./secrets/test/admin_password

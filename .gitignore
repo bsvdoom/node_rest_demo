@@ -1,0 +1,7 @@
+# Project exclude paths
+/node_modules/
+.env
+.env.*
+!.env.example
+/secrets/*
+!/secrets/*.example
